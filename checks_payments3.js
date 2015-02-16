@@ -1,4 +1,5 @@
 var WebSocket = require('ws');
+var nodemailer = require('nodemailer');
 var ws = new WebSocket('wss://s1.ripple.com:443/');
 var bitstamp = "rvYAfWj5gh67oV6fW32ZzP3Aw4Eubs59B";
 var account = bitstamp;
@@ -11,22 +12,24 @@ ws.on('open', function() {
     ws.send(JSON.stringify(info_subscribe));
 });
 
-var nodemailer = require('nodemailer');
- 
-// create reusable transporter object using SMTP transport 
-var transporter = nodemailer.createTransport({
-    service: 'Gmail',
-    auth: {
-        user: 'myemail@gmail.com',
-        pass: '***********'
-    }
+ws.on('message', function(data, flags) {
+    handler_function(data);
 });
 
-ws.on('message', function(data, flags) {
-    //console.log(flags);
+var handler_function = function(data) {
     data_obj = JSON.parse(data);
 
+	// create reusable transporter object using SMTP transport 
+	var transporter = nodemailer.createTransport({
+	    service: 'Gmail',
+	    auth: {
+	        user: 'myemail@gmail.com',
+	        pass: '***********'
+	    }
+	});
+
     if(data_obj.transaction && data_obj.transaction.TransactionType == 'Payment') {
+    	
 		// setup e-mail data with unicode symbols 
 		var mailOptions = {
 		    from: 'My name <myemail@gmail.com>', // sender address 
@@ -45,4 +48,4 @@ ws.on('message', function(data, flags) {
 		    }
 		});
     }
-});
+}

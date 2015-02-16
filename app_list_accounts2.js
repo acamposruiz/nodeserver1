@@ -18,6 +18,5 @@ ws.on('open', function() {
 });
  
 ws.on('message', function(data, flags) {
-    //console.log(flags);
     console.log(data);
 });
