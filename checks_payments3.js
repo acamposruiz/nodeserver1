@@ -17,6 +17,7 @@ ws.on('message', function(data, flags) {
 });
 
 var handler_function = function(data) {
+	console.log('Incoming data');
     data_obj = JSON.parse(data);
 
 	// create reusable transporter object using SMTP transport 
@@ -29,6 +30,8 @@ var handler_function = function(data) {
 	});
 
     if(data_obj.transaction && data_obj.transaction.TransactionType == 'Payment') {
+
+    	console.log('Sending Payment');
 
 		// setup e-mail data with unicode symbols 
 		var mailOptions = {
