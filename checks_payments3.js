@@ -13,12 +13,12 @@ ws.on('open', function() {
 });
 
 ws.on('message', function(data, flags) {
-    handler_function(data);
+	data_obj = JSON.parse(data);
+    (data_obj.transaction && data_obj.transaction.TransactionType == 'Payment')? handler_payment(data): console.log('Not a Payment');
 });
 
-var handler_function = function(data) {
-	console.log('Incoming data');
-    data_obj = JSON.parse(data);
+var handler_payment = function(data) {
+	console.log('Incoming Payment');
 
 	// create reusable transporter object using SMTP transport 
 	var transporter = nodemailer.createTransport({
@@ -28,27 +28,21 @@ var handler_function = function(data) {
 	        pass: '1234567rR'
 	    }
 	});
-
-    if(data_obj.transaction && data_obj.transaction.TransactionType == 'Payment') {
-
-    	console.log('Sending Payment');
-
-		// setup e-mail data with unicode symbols 
-		var mailOptions = {
-		    from: 'My name <rippltst1accnt@gmail.com>', // sender address 
-		    to: 'ripple1@mailinator.com', // list of receivers 
-		    subject: 'Payment transaction info', // Subject line 
-		    text: data, // plaintext body 
-		    html: '<b>'+data+'</b>' // html body 
-		};
-		 
-		// send mail with defined transport object 
-		transporter.sendMail(mailOptions, function(error, info){
-		    if(error){
-		        console.log(error);
-		    }else{
-		        console.log('Message sent: ' + info.response);
-		    }
-		});
-    }
+	// setup e-mail data with unicode symbols 
+	var mailOptions = {
+	    from: 'My name <rippltst1accnt@gmail.com>', // sender address 
+	    to: 'ripple1@mailinator.com', // list of receivers 
+	    subject: 'Payment transaction info', // Subject line 
+	    text: data, // plaintext body 
+	    html: '<b>'+data+'</b>' // html body 
+	};
+	 
+	// send mail with defined transport object 
+	transporter.sendMail(mailOptions, function(error, info){
+	    if(error){
+	        console.log(error);
+	    }else{
+	        console.log('Message sent: ' + info.response);
+	    }
+	});
 }
