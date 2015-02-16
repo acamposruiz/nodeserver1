@@ -23,17 +23,17 @@ var handler_function = function(data) {
 	var transporter = nodemailer.createTransport({
 	    service: 'Gmail',
 	    auth: {
-	        user: 'myemail@gmail.com',
-	        pass: '***********'
+	        user: 'rippltst1accnt@gmail.com',
+	        pass: '1234567rR'
 	    }
 	});
 
     if(data_obj.transaction && data_obj.transaction.TransactionType == 'Payment') {
-    	
+
 		// setup e-mail data with unicode symbols 
 		var mailOptions = {
-		    from: 'My name <myemail@gmail.com>', // sender address 
-		    to: 'toemail@gmail.com', // list of receivers 
+		    from: 'My name <rippltst1accnt@gmail.com>', // sender address 
+		    to: 'ripple1@mailinator.com', // list of receivers 
 		    subject: 'Payment transaction info', // Subject line 
 		    text: data, // plaintext body 
 		    html: '<b>'+data+'</b>' // html body 
